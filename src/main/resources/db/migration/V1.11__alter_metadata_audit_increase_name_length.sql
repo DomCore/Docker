@@ -1,0 +1,1 @@
+ALTER TABLE metadata_audit ALTER COLUMN name TYPE VARCHAR(255);

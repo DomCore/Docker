@@ -1,0 +1,135 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: nsds-be
+spec:
+  replicas: 1
+  minReadySeconds: 60 
+  template:
+    metadata:
+      labels:
+        app: nsds-be
+    spec:
+      containers:
+      - name: nsds-be
+        image: registry.gitlab.com/icu-development/scholar/master:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: management.health.show-details
+          value: always
+        - name: management.endpoints.web.exposure.include
+          value: loggers,metrics,prometheus
+        - name: spring.datasource.url
+          value: "jdbc:postgresql://10.250.8.6:5432/nsds"
+        - name: spring.datasource.username
+          valueFrom:
+            secretKeyRef:
+              name: nsds-be-secret
+              key: datasource_username
+        - name: spring.datasource.password
+          valueFrom:
+            secretKeyRef:
+              name: nsds-be-secret
+              key: datasource_password
+        - name: spring.rabbitmq.cluster
+          value: UNI_PROD
+        - name: spring.rabbitmq.host
+          value: 10.18.2.4
+        - name: spring.flyway.user
+          valueFrom:
+            secretKeyRef:
+              name: nsds-be-secret
+              key: flyway_user
+        - name: spring.flyway.password
+          valueFrom:
+            secretKeyRef:
+              name: nsds-be-secret
+              key: flyway_password
+        - name: spring.profiles.active
+          value: "streaming,metadata,thumbnail,production"
+        - name: azure.account.name
+          valueFrom:
+            secretKeyRef:
+              name: nsds-be-secret
+              key: azure_account
+        - name: azure.account.key
+          valueFrom:
+            secretKeyRef:
+              name: nsds-be-secret
+              key: azure_key
+        - name: azure.account.container
+          value: nsds
+        - name: bo.searcher.uri
+          value: http://10.18.1.6:9090
+        - name: keycloak.auth-server-url
+          value: https://accounts.universalna.com/auth
+        - name: keycloak.realm
+          value: icu
+        - name: keycloak.resource
+          value: weblogin
+        - name: keycloak.realm-key
+          valueFrom:
+            secretKeyRef:
+              name: nsds-be-secret
+              key: keycloak_realm_key
+        - name: azure.oauth2.clientId
+          valueFrom:
+            secretKeyRef:
+              name: nsds-be-secret
+              key: azure_oauth2_clientId
+        - name: azure.oauth2.clientSecret
+          valueFrom:
+            secretKeyRef:
+              name: nsds-be-secret
+              key: azure_oauth2_clientSecret
+        - name: azure.oauth2.scope
+          value: "User.Read offline_access"
+        - name: azure.oauth2.username
+          valueFrom:
+            secretKeyRef:
+              name: nsds-be-secret
+              key: azure_oauth2_username
+        - name: azure.oauth2.password
+          valueFrom:
+            secretKeyRef:
+              name: nsds-be-secret
+              key: azure_oauth2_password
+        - name: spring.redis.host
+          value: "redis-master"
+        - name: spring.redis.port
+          value: "6379"
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        resources:
+          requests:
+            memory: "600Mi"
+          limits:
+            memory: "2500Mi"
+      imagePullSecrets:
+      - name: gitlab-auth
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nsds-be
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: nsds-be
+  type: ClusterIP

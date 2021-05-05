@@ -1,0 +1,1 @@
+UPDATE metadata SET preview = '' WHERE name ILIKE '%.tif';

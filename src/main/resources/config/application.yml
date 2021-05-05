@@ -1,0 +1,384 @@
+spring:
+  application:
+    name: nsds
+  servlet:
+    multipart:
+      max-file-size: 6000MB
+      max-request-size: 6000MB
+      enabled: false
+  jpa:
+    generate-ddl: false
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  datasource:
+    hikari:
+      maximum-pool-size: 500
+      minimum-idle: 10
+      connection-timeout: 10000
+      idle-timeout: 500000
+      max-lifetime: 600000
+      pool-name: 'hikari-custom-configured-pool'
+      leak-detection-threshold: 10000
+  jackson:
+    deserialization:
+      ACCEPT_SINGLE_VALUE_AS_ARRAY: true
+keycloak:
+  public-client: false
+  bearer-only: true
+  principal-attribute: preferred_username
+bo:
+  searcher:
+    api:
+      uri: /rest/claims/_list
+      search:
+        settlement:
+          case:
+            by:
+              id: /rest/claims/bySettlementCaseId/{settlementCaseId}
+        insurance:
+          case:
+            by:
+              notification:
+                id: /rest/claims//byNoticeId/{noticeId}
+      contract:
+        search: /rest/contract/_list
+application:
+  fileshare:
+    ttl: 6 # month
+  editable:
+    - xls
+    - xlsx
+    - csv
+    - doc
+    - docx
+    - rtf
+    - txt
+    - xps
+    - xlsm
+    - msg
+  tag:
+    - tag: Асесор
+      order: 0
+    - tag: Документи
+      order: 1
+    - tag: Справа в ліміті Хендлера
+      order: 2
+    - tag: Справа в ліміті ЦВЗ
+      order: 3
+    - tag: Справа в ліміті ВВЗ ГО
+      order: 4
+    - tag: Розмір збитку
+      order: 5
+    - tag: Переписка погодження
+      order: 6
+    - tag: Фото на страхування
+      order: 7
+    - tag: Фото з місця пригоди
+      order: 8
+    - tag: Фото ТЗ КАСКО
+      order: 9
+    - tag: Фото ТЗ Страхувальника ОЦВ
+      order: 10
+    - tag: Фото ТЗ Потерпілого ОЦВ
+      order: 11
+    - tag: Фото попередні випадки
+      order: 12
+    - tag: Фото Об’єкту пошк Майно
+      order: 13
+    - tag: Відмова
+      order: 14
+    - tag: Без виплати
+      order: 15
+    - tag: Доплата 1
+      order: 16
+    - tag: Справа паперова
+      order: 17
+  extension:
+    restricted:
+      - extension: ade
+        fileType: Файлы проекта Access
+        warning: Может содержать автоматически запускаемые макросы.
+      - extension: adp
+        fileType: Файлы проекта Access
+        warning: Может содержать автоматически запускаемые макросы.
+      - extension: and
+        fileType: Файлы проекта Access
+        warning: Может содержать автоматически запускаемые макросы.
+      - extension: asf
+        fileType: Потоковый аудио- или видеофайл
+        warning: Может быть скомпрометирован через переполнение буфера
+      - extension: lsf
+        fileType: Потоковый аудио- или видеофайл
+        warning: Может быть скомпрометирован через переполнение буфера
+      - extension: lsx
+        fileType: Потоковый аудио- или видеофайл
+        warning: Может быть скомпрометирован через переполнение буфера
+      - extension: atf
+        fileType: Файл автопередачи Symantec pсAnywhere
+        warning: Может начать сессию автопередачи pсAnywhere.
+      - extension: bas
+        fileType: Модуль Visual Basic (VB)
+        warning: Может оказаться вредоносной программой.
+      - extension: bat
+        fileType: Пакетный файл команд DOS
+        warning: Может содержать вредоносные команды.
+      - extension: cab
+        fileType: Файл архива Microsoft
+        warning: Открывается в IE и может помогать устанавливать вредоносные файлы.
+      - extension: cer
+        fileType: Сертификат безопасности
+        warning: Может устанавливать несанкционированный сертификат в IE
+      - extension: crt
+        fileType: Сертификат безопасности
+        warning: Может устанавливать несанкционированный сертификат в IE
+      - extension: der
+        fileType: Сертификат безопасности
+        warning: Может устанавливать несанкционированный сертификат в IE
+      - extension: chm
+        fileType: Скомпилированный HTML-файл подсказки
+        warning: Может использоваться с целью компрометации IE.
+      - extension: cmd
+        fileType: Командный сценарий NT
+        warning: Может использоваться для написания вредоносных пакетных файлов.
+      - extension: com
+        fileType: Приложение MS-DOS
+        warning: Может быть вредоносной программой.
+      - extension: cpl
+        fileType: Расширение Control Panel
+        warning: Может устанавливать вредоносное расширение в Control Panel.
+      - extension: crl
+        fileType: Лист отозванных сертификатов (CRL)
+        warning: Может быть подложным листом
+      - extension: css
+        fileType: Таблицы стилей Cascading Style Sheets (CSS)
+        warning: Может использоваться для компрометации IE.
+      - extension: dll
+        fileType: DLL- приложение Windows
+        warning: Может содержать вредоносный код.
+      - extension: dot
+        fileType: Шаблон Word
+        warning: Может содержать вредоносные макросы
+      - extension: dothtml
+        fileType: Шаблон Word
+        warning: Может содержать вредоносные макросы
+      - extension: dsm
+        fileType: Медиафайл Nullsoft WinAmp
+        warning: Может использоваться для вызова вредоносной программы.
+      - extension: wma
+        fileType: Медиафайл Nullsoft WinAmp
+        warning: Может использоваться для вызова вредоносной программы.
+      - extension: ult
+        fileType: Медиафайл Nullsoft WinAmp
+        warning: Может использоваться для вызова вредоносной программы.
+      - extension: stm
+        fileType: Медиафайл Nullsoft WinAmp
+        warning: Может использоваться для вызова вредоносной программы.
+      - extension: it
+        fileType: Медиафайл Nullsoft WinAmp
+        warning: Может использоваться для вызова вредоносной программы.
+      - extension: far
+        fileType: Медиафайл Nullsoft WinAmp
+        warning: Может использоваться для вызова вредоносной программы.
+      - extension: dun
+        fileType: Экспортный файл DUN
+        warning: Может содержать информацию о коммутируемом соединении для совершения несанкционированных звонков.
+      - extension: exe
+        fileType: Файл приложения
+        warning: Может использоваться для вызова вредоносной программы.
+      - extension: fav
+        fileType: Список избранных ссылок в IE Favorites
+        warning: Может использоваться для ссылок на хакерский Web-сайт.
+      - extension: hlp
+        fileType: Файл Microsoft Help
+        warning: Может использоваться в разных схемах атак.
+      - extension: ht
+        fileType: Файл Hyperterminal
+        warning: Может начать коммутируемое соединение с хостами
+      - extension: htt
+        fileType: Файл Hyperterminal
+        warning: Может начать коммутируемое соединение с хостами
+      - extension: hta
+        fileType: Приложение HTML
+        warning: Часто используются
+      - extension: ini
+        fileType: Файл настройки приложения
+        warning: Может использоваться злоумышленником для изменения настроек программы.
+      - extension: ins
+        fileType: Настройки соединения Internet
+        warning: Может использоваться для того
+      - extension: isp
+        fileType: Настройки соединения Internet
+        warning: Может использоваться для того
+      - extension: jar
+        fileType: Файл архива Java
+        warning: Может вызвать атаку через Java.
+      - extension: jav
+        fileType: Апплет Java
+        warning: Может вызвать атаку через Java.
+      - extension: java
+        fileType: Апплет Java
+        warning: Может вызвать атаку через Java.
+      - extension: js
+        fileType: Файл сценария Java
+        warning: Может содержать вредоносный код.
+      - extension: jse
+        fileType: Файл сценария Java
+        warning: Может содержать вредоносный код.
+      - extension: mad
+        fileType: Файлы
+        warning:  имеющие отношение к Access
+      - extension: mas
+        fileType: Файлы
+        warning:  имеющие отношение к Access
+      - extension: mda
+        fileType: Файлы
+        warning:  имеющие отношение к Access
+      - extension: maf
+        fileType: Файлы
+        warning:  имеющие отношение к Access
+      - extension: mag
+        fileType: Приложение или база данных Access
+        warning: Может содержать вредоносные макросы.
+      - extension: mdbhtml
+        fileType: Приложение или база данных Access
+        warning: Может содержать вредоносные макросы.
+      - extension: mdb
+        fileType: Приложение или база данных Access
+        warning: Может содержать вредоносные макросы.
+      - extension: mdx
+        fileType: Приложение или база данных Access
+        warning: Может содержать вредоносные макросы.
+      - extension: mdt
+        fileType: Приложение или база данных Access
+        warning: Может содержать вредоносные макросы.
+      - extension: mdn
+        fileType: Приложение или база данных Access
+        warning: Может содержать вредоносные макросы.
+      - extension: maw
+        fileType: Приложение или база данных Access
+        warning: Может содержать вредоносные макросы.
+      - extension: mav
+        fileType: Приложение или база данных Access
+        warning: Может содержать вредоносные макросы.
+      - extension: mat
+        fileType: Приложение или база данных Access
+        warning: Может содержать вредоносные макросы.
+      - extension: mar
+        fileType: Приложение или база данных Access
+        warning: Может содержать вредоносные макросы.
+      - extension: maq
+        fileType: Приложение или база данных Access
+        warning: Может содержать вредоносные макросы.
+      - extension: mam
+        fileType: Приложение или база данных Access
+        warning: Может содержать вредоносные макросы.
+      - extension: mde
+        fileType: База данных Access с скомпилированными модулями и удаленным исходным кодом
+        warning: Может содержать вредоносные макросы.
+      - extension: mhtml
+        fileType: Документ MIME HTML
+        warning: Может содержать опасные команды.
+      - extension: mhtm
+        fileType: Документ MIME HTML
+        warning: Может содержать опасные команды.
+      - extension: mim
+        fileType: Файл MIME
+        warning: Может стать мишенью для атак через MIME.
+      - extension: msc
+        fileType: Сохраненный файл настроек консоли MMC
+        warning: Может использоваться для получения привилегий.
+      - extension: msi
+        fileType: Пакет Microsoft Installer
+        warning: Может использоваться для установки или изменения программ.
+      - extension: msp
+        fileType: Пакет Microsoft Installer
+        warning: Может использоваться для установки или изменения программ.
+      - extension: mst
+        fileType: Файл Microsoft Transform используется в некоторых программах установки
+        warning: Может использоваться злоумышленниками для нарушения работы системы.
+      - extension: nws
+        fileType: Новостное сообщение Outlook Express
+        warning: Может пересылать вирус Nimda или подобный.
+      - extension: pdc
+        fileType: Скомпилированный сценарий VB
+        warning: Может содержать опасный код.
+      - extension: pif
+        fileType: Файл с информацией о программе
+        warning: Может исполнять вредоносной код.
+      - extension: pl
+        fileType: Файл сценария на Perl
+        warning: Может содержать разрушительный код.
+      - extension: prf
+        fileType: Настройки профиля Outlook
+        warning: Может переписать настройки по умолчанию или настройки отношений доверия.
+      - extension: pst
+        fileType: Файл персонального хранилища Outlook или Exchange
+        warning: Может содержать вредоносные прикрепляемые файлы и быть импортированным в Outlook или Outlook Express
+      - extension: py
+        fileType: Файл сценария на Python
+        warning: Может содержать опасный код.
+      - extension: reg
+        fileType: Файл разделов реестра
+        warning: Может создать или изменить параметры реестра.
+      - extension: scf
+        fileType: Команда Windows Explorer
+        warning: Может использоваться злоумышленниками.
+      - extension: scp
+        fileType: Сценарий DUN
+        warning: Может начать несанкционированное внешнее соединение.
+      - extension: scr
+        fileType: Файл хранителя экрана Windows
+        warning: Может содержать
+      - extension: shs
+        fileType: Объект оболочки
+        warning: Может скрывать опасный код.
+      - extension: shb
+        fileType: Объект оболочки
+        warning: Может скрывать опасный код.
+      - extension: slk
+        fileType: Файл экспорта/импорта Excel Symbolic Link (SLK)
+        warning: Может содержать скрытые вредоносные макросы.
+      - extension: stl
+        fileType: Список санкционированных сертификатов CTL
+        warning: Может заставить доверять чужому сертификату.
+      - extension: swf
+        fileType: Объект Shockwave Flash
+        warning: Может быть скомпрометирован.
+      - extension: spl
+        fileType: Объект Shockwave Flash
+        warning: Может быть скомпрометирован.
+      - extension: vb
+        fileType: Файл VBScript
+        warning: Может содержать вредоносный код.
+      - extension: vbs
+        fileType: Файл VBScript
+        warning: Может содержать вредоносный код.
+      - extension: vbe
+        fileType: Файл VBScript
+        warning: Может содержать вредоносный код.
+      - extension: vxd
+        fileType: Драйвер виртуального устройства
+        warning: Может скрывать от пользователя скомпрометированную версию реального драйвера.
+      - extension: wbk
+        fileType: Резервная копия документа Word
+        warning: Может содержать вредные макросы.
+      - extension: wiz
+        fileType: Файл мастера
+        warning: Может использоваться для автоматизации в будущем.
+      - extension: ws
+        fileType: Файл WSH
+        warning: Может исполнять вредоносный код.
+      - extension: sct
+        fileType: Файл WSH
+        warning: Может исполнять вредоносный код.
+      - extension: wsc
+        fileType: Файл WSH
+        warning: Может исполнять вредоносный код.
+      - extension: wsf
+        fileType: Файл WSH
+        warning: Может исполнять вредоносный код.
+      - extension: cs
+        fileType: Файл WSH
+        warning: Может исполнять вредоносный код.

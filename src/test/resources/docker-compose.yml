@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+    nsds-rabbitmq-it:
+        image: rabbitmq:management
+        ports:
+        - "5672:5672"
+        - "15672:15672"
+    nsds-postgres-it:
+        image: postgres:11
+        ports:
+        - 5432:5432
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: nsds
+    nsds-redis-it:
+        image: redis:5.0.3-alpine
+        ports:
+          - 6379:6379

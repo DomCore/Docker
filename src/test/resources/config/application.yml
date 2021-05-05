@@ -1,0 +1,86 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  profiles:
+    active: IT,metadata,streaming
+  application:
+    name: nsds
+  servlet:
+    multipart:
+      max-file-size: 1000MB
+      max-request-size: 1000MB
+      enabled: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/nsds
+    username: postgres
+    password: postgres
+  jpa:
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  jackson:
+    deserialization:
+      ACCEPT_SINGLE_VALUE_AS_ARRAY: true
+  rabbitmq:
+    cluster: local
+  redis:
+    host: localhost
+    port: 6379
+keycloak:
+  public-client: false
+  bearer-only: true
+  principal-attribute: preferred_username
+  realm: FIRST.REALM
+  realm-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnSti1E/uyi70uM8QJhGNZPiEMpM6WmxRfdFklIz3Tzec1KzWKh1tBMYTN4p+oX9wYd/y5xYtHYllDoevGvWGQ1gOyhNCHPtUSByUc5oKycXkgUF2YA3lpdbhsQpnafkMmCY/F08SF88k6uqVJXn310v3R6/NN0d8jYoIRpjNWnYPBuZoLoaeG2nBC7rF+ahH66jxFYFx7hCeBLxobkPcLMWWb5iL1HQRG86aAHIPKn/9ROGDDWN43a3TgoYZpz/aThpe4wo1Z9cLGpUkUM4tD5FdzOaGrlUEmCom+X+t+lRBoCgd8XIlxlLD6xLL6jpsJcf5ldgJHH97g9BsKCzsBwIDAQAB
+  resource: weblogin
+  auth-server-url: https://104.40.182.194:8443/auth
+azure:
+  account:
+    name: mockedNamePropertyValue
+    key: mockedKeyPropertyValue
+    container: mockedContainerPropertyValue
+bo:
+  searcher:
+    uri: localhost
+    api:
+      uri: /rest/claims/_list
+      search:
+        settlement:
+          case:
+            by:
+              id: /rest/claims/bySettlementCaseId/{settlementCaseId}
+        insurance:
+          case:
+            by:
+              notification:
+                id: /rest/claims//byNoticeId/{noticeId}
+      contract:
+        search: /rest/contract/_list
+application:
+  fileshare:
+    ttl: 6 # month
+  editable:
+    - xls
+    - xlsx
+    - csv
+    - doc
+    - docx
+    - rtf
+    - txt
+    - xps
+    - xlsm
+    - msg
+  tag:
+    - tag: Cкан-копія коду ІНН
+      order: 0
+    - tag: Картка Кредобонус
+      order: 1
+  extension:
+    restricted:
+      - extension: ade
+        fileType: Файлы проекта Access
+        warning: Может содержать автоматически запускаемые макросы.
+      - extension: exe
+        fileType: exe
+        warning: exe

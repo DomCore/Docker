@@ -1,0 +1,20 @@
+CREATE TABLE METADATA (ID                   UUID         CONSTRAINT METADATA_PK PRIMARY KEY,
+                       NAME                 VARCHAR(255) CONSTRAINT NAME NOT NULL,
+                       SIZE                 BIGINT,
+                       RELATION             VARCHAR(255) CONSTRAINT RELATION NOT NULL,
+                       RELATION_ID          VARCHAR(255) CONSTRAINT RELATION_ID NOT NULL,
+                       DESCRIPTION          TEXT,
+                       UPLOADER_ID          VARCHAR(255) CONSTRAINT UPLOADER_ID NOT NULL,
+                       TIMESTAMP            TIMESTAMPTZ  CONSTRAINT TIMESTAMP NOT NULL,
+                       SOURCE               VARCHAR(255) CONSTRAINT SOURCE NOT NULL,
+                       ORIGIN               VARCHAR(255) CONSTRAINT ORIGIN NOT NULL,
+                       STATUS               VARCHAR(255) CONSTRAINT STATUS NOT NULL,
+                       FILE_STORAGE_FILE_ID TEXT         CONSTRAINT FILE_STORAGE_FILE_ID NOT NULL,
+                       PREVIEW              TEXT,
+                       TAGS                 JSONB,
+                       CREATED_DATE         TIMESTAMPTZ,
+                       CREATED_BY           VARCHAR(255),
+                       LAST_MODIFIED_DATE   TIMESTAMPTZ,
+                       LAST_MODIFIED_BY     VARCHAR(255)
+)
+

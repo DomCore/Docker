@@ -1,0 +1,1 @@
+UPDATE metadata SET tags = '[]' WHERE tags IS NULL;

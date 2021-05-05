@@ -1,0 +1,53 @@
+version: '3.7'
+services:
+  nsds:
+    image: nsds
+    ports:
+    - 8080:8080
+    depends_on:
+    - nsds-postgres
+    - redis-nsds
+    environment:
+    - spring.profiles.active=metadata,streaming,thumbnail
+    - spring.datasource.url=jdbc:postgresql://nsds-postgres:5432/nsds
+    - spring.datasource.username=postgres
+    - spring.datasource.password=postgres
+    - spring.rabbitmq.cluster=UNI_TEST
+    - spring.rabbitmq.host=nsds-rabbitmq
+    - spring.rabbitmq.port=5672
+    - spring.rabbitmq.username=guest
+    - spring.rabbitmq.password=guest
+    - azure.account.name=---
+    - azure.account.key=---
+    - azure.account.container=---
+    - bo.searcher.uri=http://10.10.0.104:9090
+    - keycloak.auth-server-url=https://accounts-dev.universalna.com/auth
+    - keycloak.realm=FIRST.REALM
+    - keycloak.resource=weblogin,chatbot,HIS1c
+    - keycloak.realm-key=---
+    - spring.redis.host=redis-nsds
+    - spring.redis.port=6379
+    - azure.oauth2.clientId=---
+    - azure.oauth2.clientSecret=---
+    - azure.oauth2.scope=User.Read offline_access
+    - azure.oauth2.username=---
+    - azure.oauth2.password=---
+    - management.health.show-details=always
+  nsds-postgres:
+    image: postgres:11
+    ports:
+    - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nsds
+  nsds-rabbitmq:
+    image: rabbitmq:management
+    ports:
+    - "5672:5672"
+    - "15672:15672"
+  redis-nsds:
+    container_name: 'redis-nsds'
+    image: 'redis:3.2.0'
+    ports:
+      - '6379:6379'

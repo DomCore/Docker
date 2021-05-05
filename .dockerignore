@@ -1,0 +1,24 @@
+# https://docs.docker.com/engine/reference/builder/#dockerignore-file
+target
+classes/
+generated-sources/
+generated-test-sources/
+h2db/
+maven-archiver/
+maven-status/
+reports/
+surefire-reports/
+test-classes/
+test-results/
+www/
+!*.jar
+!*.war
+Dockerfile
+docker-compose.yml
+manifest.yml
+k8s.yml
+k8s-dev.yml
+k8s-prod.yml
+README.md
+.gitlab-ci.yml
+.gitignore

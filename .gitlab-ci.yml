@@ -1,0 +1,79 @@
+image: docker:stable
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  imageTag: "registry.gitlab.com/icu-development/scholar"
+  serviceName: "nsds-be"
+  # This will supress any download for dependencies and plugins or upload messages which would clutter the console log.
+  # `showDateTime` will show the passed time in milliseconds. You need to specify `--batch-mode` to make this work.
+  MAVEN_OPTS: "-Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
+
+# Cache downloaded dependencies and plugins between builds.
+# To keep cache across branches add 'key: "$CI_JOB_NAME"'
+cache:
+  paths:
+    - ./.m2/repository
+  # keep cache across branch
+  key: "$CI_BUILD_REF_NAME"
+
+build:
+  services:
+  - docker:dind
+  stage: build
+  script:
+  - docker build -t ${imageTag} .
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+  - docker tag ${imageTag} ${imageTag}:$CI_PIPELINE_ID
+  - docker push ${imageTag}
+  - docker push ${imageTag}:$CI_PIPELINE_ID
+  only:
+  - develop
+  - test-ci-cd
+
+build_prod:
+  services:
+  - docker:dind
+  stage: build
+  script:
+  - docker build -t ${imageTag}/master -t ${imageTag}/master:$CI_PIPELINE_ID .
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+  - docker push ${imageTag}/master:$CI_PIPELINE_ID
+  - docker push ${imageTag}/master
+  only:
+  - master
+
+deploy_to_dev:
+    stage: deploy
+    image: siriusred/k8s-kubectl:v1.13.1
+    environment:
+        name: dev
+    script:
+        - mkdir -p $HOME/.kube
+        - echo -n $KUBE_CONFIG | base64 -d > $HOME/.kube/config
+        - kubectl get pods -l app=$serviceName
+        - sed -ibak "s%$imageTag:latest%$imageTag:$CI_PIPELINE_ID%g" k8s-dev.yml
+        - cat k8s-dev.yml
+        - cat k8s-dev.yml
+        - kubectl apply -f k8s-dev.yml
+        - kubectl rollout status deployment.v1.apps/$serviceName
+        - kubectl get pods -l app=$serviceName
+    only:
+        - develop
+
+deploy_to_prod:
+    stage: deploy
+    image: siriusred/k8s-kubectl:v1.13.1
+    environment:
+        name: production
+    script:
+        - mkdir -p $HOME/.kube
+        - echo -n $KUBE_CONFIG_PROD | base64 -d > $HOME/.kube/config
+        - kubectl get pods -l app=$serviceName
+        - sed -ibak "s%$imageTag/master:latest%$imageTag/master:$CI_PIPELINE_ID%g" k8s-prod.yml
+        - cat k8s-prod.yml
+        - kubectl apply -f k8s-prod.yml
+        - kubectl rollout status deployment.v1.apps/$serviceName
+        - kubectl get pods -l app=$serviceName
+    only:
+        - master
