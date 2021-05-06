@@ -15,5 +15,4 @@ public enum Relation {
     CANCEL_REQUEST,
     BLANK,
     PAYMENT
-
 }
